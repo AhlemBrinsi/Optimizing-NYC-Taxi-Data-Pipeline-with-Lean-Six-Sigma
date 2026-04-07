@@ -1,0 +1,21 @@
+import pandas as pd
+
+def transform_before():
+    df = pd.read_csv("data/raw/taxi_tripdata.csv")
+
+    # ❌ Mauvaise pratique : duplication inutile
+    df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
+    df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'])
+
+    # ❌ Mauvaise pratique : boucle lente
+    trip_minutes = []
+    for i in range(len(df)):
+        trip_minutes.append(df['trip_duration'][i] / 60)
+
+    df['trip_minutes'] = trip_minutes
+
+    # ❌ Redondance
+    df['hour'] = df['pickup_datetime'].dt.hour
+    df['hour_dup'] = df['pickup_datetime'].dt.hour
+
+    return df
